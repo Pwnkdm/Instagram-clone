@@ -1,0 +1,31 @@
+import axios from "axios";
+
+export const loginUser = (email, password) => async (dispatch) => {
+  try {
+    dispatch({ type: "LoginRequest" });
+
+    const { data } = await axios.post(
+      "/api/v1/login",
+      { email, password },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    dispatch({ type: "LoginSucess", payload: data.user });
+  } catch (error) {
+    dispatch({ type: "LoginFailure", payload: error });
+  }
+};
+
+export const loadUser = () => async (dispatch) => {
+  try {
+    dispatch({ type: "LoadUserRequest" });
+
+    const { data } = await axios.get("/api/v1/me");
+
+    dispatch({ type: "LoadUserSucess", payload: data.user });
+  } catch (error) {
+    dispatch({ type: "LoadUserFailure", payload: error });
+  }
+};
